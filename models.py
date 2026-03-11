@@ -31,8 +31,8 @@ class Wall(Character):
 class Ball(Character):
     speed_x = 3
     speed_y = 3
-    win_left_counter = 0
-    win_right_counter = 0
+    lose_left_counter = 0
+    lose_right_counter = 0
     def ball_moving(self):
         self.rect.x += self.speed_x
         self.rect.y += self.speed_y
@@ -43,10 +43,10 @@ class Ball(Character):
             self.speed_x *= -1
     def add_point(self,wall1,wall2):
         if self.rect.x <= 0:
-            self.win_left_counter += self.start_point(wall1,wall2)
+            self.lose_right_counter += self.start_point(wall1,wall2)
             return True
         if self.rect.x >= self.window.get_size()[0] - self.rect.w:
-            self.win_right_counter += self.start_point(wall1,wall2)
+            self.lose_left_counter += self.start_point(wall1,wall2)
             return True
     def start_point(self,wall1,wall2):
         self.rect.x = self.window.get_size()[0]/2 - self.rect.w
@@ -55,5 +55,11 @@ class Ball(Character):
         self.speed_y = 3
         wall1.rect.y = self.window.get_size()[1]/2 - self.rect.h
         wall2.rect.y = self.window.get_size()[1]/2 - self.rect.h
-
         return 1
+
+
+class Button(Character):
+    def check(self):
+        mouse_pressed = mouse.get_pressed()
+        if mouse_pressed[0]:
+            return self.rect.collidepoint(mouse.get_pos()[0],mouse.get_pos()[1])
